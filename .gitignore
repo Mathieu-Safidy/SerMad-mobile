@@ -1,0 +1,53 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Local configuration
+local.properties
+
+# Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Kotlin
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+
+# Logs
+*.log
+
+# APK / AAB
+*.apk
+*.aab
+
+# Keystore files (important : ne pas partager les clés)
+*.jks
+*.keystore
+
+# Google Services (si contient des infos sensibles)
+# google-services.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# Firebase / Crashlytics
+firebaseCrashlytics.properties
+crashlytics.properties
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
