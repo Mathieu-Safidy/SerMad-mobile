@@ -16,6 +16,7 @@ import com.example.demarches.ui.home.HomeViewModel
 import com.example.demarches.ui.citoyen.DemandeListScreen
 import com.example.demarches.ui.notifications.NotificationListScreen
 import com.example.demarches.ui.admin.AdministrationListScreen
+import com.example.demarches.ui.localisation.LocalisationScreen
 import com.example.demarches.ui.qrcode.QRCodeScannerScreen
 import com.example.demarches.ui.agent.CreerDemandeScreen
 
@@ -26,6 +27,9 @@ sealed class Screen(val route: String) {
     object Demandes : Screen("demandes")
     object Notifications : Screen("notifications")
     object Administrations : Screen("administrations")
+    object Localisation : Screen("localisation/{idAdministration}") {
+        const val ARG_ID_ADMINISTRATION = "idAdministration"
+    }
     object QRCode : Screen("qrcode")
     object CreerDemande : Screen("creer_demande")
 }
@@ -119,7 +123,29 @@ fun NavGraph(
         }
 
         composable(Screen.Administrations.route) {
-            AdministrationListScreen()
+            AdministrationListScreen(
+                onLocaliserClick = { idAdministration ->
+                    navController.navigate(
+                        Screen.Localisation.route.replace(
+                            "{${Screen.Localisation.ARG_ID_ADMINISTRATION}}",
+                            idAdministration.toString()
+                        )
+                    )
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Localisation.route,
+            arguments = listOf(
+                navArgument(Screen.Localisation.ARG_ID_ADMINISTRATION) { type = NavType.LongType }
+            )
+        ) {
+            LocalisationScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable(Screen.QRCode.route) {

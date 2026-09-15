@@ -98,7 +98,7 @@ data class LocalisationResponse(
     val longitude: Double?,
     val latitude: Double?,
     val codePostal: String?,
-    val idAdministration: Long
+    val idAdministration: Long?
 )
 
 data class QRCodeResponse(
