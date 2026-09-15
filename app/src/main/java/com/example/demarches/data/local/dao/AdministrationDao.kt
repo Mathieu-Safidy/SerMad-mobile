@@ -9,6 +9,9 @@ interface AdministrationDao {
     @Query("SELECT * FROM Administration")
     fun getAllAdministrations(): Flow<List<AdministrationEntity>>
 
+    @Query("SELECT * FROM Administration WHERE idAdministration = :idAdministration")
+    fun getAdministrationById(idAdministration: Long): Flow<AdministrationEntity?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAdministration(admin: AdministrationEntity)
 

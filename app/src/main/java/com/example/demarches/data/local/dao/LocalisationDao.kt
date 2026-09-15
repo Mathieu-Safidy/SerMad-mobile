@@ -9,6 +9,9 @@ interface LocalisationDao {
     @Query("SELECT * FROM LocalisationAdm")
     fun getAllLocalisations(): Flow<List<LocalisationAdmEntity>>
 
+    @Query("SELECT * FROM LocalisationAdm WHERE idAdministration = :idAdministration")
+    fun getLocalisationsByAdministrationId(idAdministration: Long): Flow<List<LocalisationAdmEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocalisation(localisation: LocalisationAdmEntity)
 

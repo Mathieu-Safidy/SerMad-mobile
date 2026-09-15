@@ -22,8 +22,16 @@ class AdministrationRepository @Inject constructor(
         return administrationDao.getAllAdministrations()
     }
 
+    fun getAdministration(idAdministration: Long): Flow<AdministrationEntity?> {
+        return administrationDao.getAdministrationById(idAdministration)
+    }
+
     fun getLocalisationsLocal(): Flow<List<LocalisationAdmEntity>> {
         return localisationDao.getAllLocalisations()
+    }
+
+    fun getLocalisationsForAdministration(idAdministration: Long): Flow<List<LocalisationAdmEntity>> {
+        return localisationDao.getLocalisationsByAdministrationId(idAdministration)
     }
 
     fun getDocumentsLocal(): Flow<List<DocumentEntity>> {
@@ -56,7 +64,7 @@ class AdministrationRepository @Inject constructor(
                                 longitude = it.longitude,
                                 latitude = it.latitude,
                                 codePostal = it.codePostal,
-                                idAdministration = it.idAdministration
+                                idAdministration = it.idAdministration ?: admin.idAdministration
                             )
                         } ?: emptyList()
                         localisationDao.insertAll(localisations)
