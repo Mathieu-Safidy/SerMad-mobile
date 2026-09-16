@@ -8,6 +8,9 @@ data class DocumentEntity(
     @PrimaryKey val idDocument: Long,
     val libelle: String,
     val ageMinimum: Int?,
+    val estLieuUnique: Boolean?,
+    val dossier: String?,
+    val administrationId: Long?,
     val categorieLibelle: String?,
     val administrationLibelle: String?,
     val typeDocumentLibelle: String?

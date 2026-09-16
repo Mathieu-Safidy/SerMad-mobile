@@ -7,6 +7,7 @@ import com.example.demarches.data.local.entity.AdministrationEntity
 import com.example.demarches.data.local.entity.DocumentEntity
 import com.example.demarches.data.local.entity.LocalisationAdmEntity
 import com.example.demarches.data.remote.api.ApiService
+import com.example.demarches.data.remote.dto.LieuResponse
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,6 +37,23 @@ class AdministrationRepository @Inject constructor(
 
     fun getDocumentsLocal(): Flow<List<DocumentEntity>> {
         return documentDao.getAllDocuments()
+    }
+
+    fun getDocumentsLieuUniqueLocal(): Flow<List<DocumentEntity>> {
+        return documentDao.getDocumentsLieuUnique()
+    }
+
+    fun getDocumentById(idDocument: Long): Flow<DocumentEntity?> {
+        return documentDao.getDocumentById(idDocument)
+    }
+
+    suspend fun getDocumentLieu(idDocument: Long): LieuResponse? {
+        return try {
+            val response = apiService.getDocumentLieu(idDocument)
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            null
+        }
     }
 
     suspend fun refreshAdministrations() {
@@ -85,13 +103,51 @@ class AdministrationRepository @Inject constructor(
                         idDocument = it.idDocument,
                         libelle = it.libelle ?: "",
                         ageMinimum = it.ageMinimum,
-                        categorieLibelle = null,
-                        administrationLibelle = null,
-                        typeDocumentLibelle = null
+                        estLieuUnique = it.estLieuUnique,
+                        dossier = it.dossier,
+                        administrationId = it.administration?.idAdministration,
+                        categorieLibelle = it.categorie?.libelle,
+                        administrationLibelle = it.administration?.libelle,
+                        typeDocumentLibelle = it.typeDocument?.libelle
                     )
                 } ?: emptyList()
                 documentDao.deleteAll()
                 documentDao.insertAll(documents)
+            }
+        } catch (e: Exception) {
+            // Offline, use cache
+        }
+    }
+
+    suspend fun refreshAdministrationWithLocalisations(idAdministration: Long) {
+        try {
+            val admResponse = apiService.getAdministrationById(idAdministration)
+            if (admResponse.isSuccessful) {
+                admResponse.body()?.let { adm ->
+                    administrationDao.insertAdministration(
+                        AdministrationEntity(
+                            idAdministration = adm.idAdministration,
+                            libelle = adm.libelle ?: "",
+                            typeAdmLibelle = adm.typeAdm?.libelle
+                        )
+                    )
+                }
+            }
+
+            val locResponse = apiService.getLocalisation(idAdministration)
+            if (locResponse.isSuccessful) {
+                val localisations = locResponse.body()?.map {
+                    LocalisationAdmEntity(
+                        idLocalisationAdm = it.idLocalisationAdm,
+                        libelle = it.libelle,
+                        adresse = it.adresse,
+                        longitude = it.longitude,
+                        latitude = it.latitude,
+                        codePostal = it.codePostal,
+                        idAdministration = it.idAdministration ?: idAdministration
+                    )
+                } ?: emptyList()
+                localisationDao.insertAll(localisations)
             }
         } catch (e: Exception) {
             // Offline, use cache

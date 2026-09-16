@@ -16,7 +16,7 @@ import com.example.demarches.data.local.entity.*
         StatutDemandeEntity::class,
         ProcedureMereEntity::class
     ],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
