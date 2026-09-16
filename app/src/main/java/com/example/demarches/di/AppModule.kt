@@ -73,7 +73,9 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "demarches_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

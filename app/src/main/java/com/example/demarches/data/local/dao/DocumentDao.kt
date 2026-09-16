@@ -9,6 +9,12 @@ interface DocumentDao {
     @Query("SELECT * FROM Document")
     fun getAllDocuments(): Flow<List<DocumentEntity>>
 
+    @Query("SELECT * FROM Document WHERE estLieuUnique = 1")
+    fun getDocumentsLieuUnique(): Flow<List<DocumentEntity>>
+
+    @Query("SELECT * FROM Document WHERE idDocument = :idDocument")
+    fun getDocumentById(idDocument: Long): Flow<DocumentEntity?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDocument(document: DocumentEntity)
 

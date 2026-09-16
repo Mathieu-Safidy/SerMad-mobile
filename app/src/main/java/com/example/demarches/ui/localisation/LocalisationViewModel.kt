@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,4 +28,10 @@ class LocalisationViewModel @Inject constructor(
     val administration: StateFlow<AdministrationEntity?> =
         administrationRepository.getAdministration(idAdministration)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    fun refresh() {
+        viewModelScope.launch {
+            administrationRepository.refreshAdministrationWithLocalisations(idAdministration)
+        }
+    }
 }

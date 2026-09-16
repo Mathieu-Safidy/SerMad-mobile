@@ -51,6 +51,12 @@ interface ApiService {
     @GET("api/documents")
     suspend fun getDocuments(): Response<List<DocumentResponse>>
 
+    @GET("api/documents/lieu-unique")
+    suspend fun getDocumentsLieuUnique(): Response<List<DocumentResponse>>
+
+    @GET("api/documents/{id}/lieu")
+    suspend fun getDocumentLieu(@Path("id") id: Long): Response<LieuResponse>
+
     @GET("api/documents/procedures")
     suspend fun getProcedures(): Response<List<Any>>
 }

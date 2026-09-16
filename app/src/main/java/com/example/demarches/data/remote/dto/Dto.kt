@@ -62,7 +62,22 @@ data class ProcedureFilleResponse(
 data class DocumentResponse(
     val idDocument: Long,
     val libelle: String?,
-    val ageMinimum: Int?
+    val ageMinimum: Int?,
+    val estLieuUnique: Boolean?,
+    val dossier: String?,
+    val categorie: CategorieResponse?,
+    val administration: AdministrationResponse?,
+    val typeDocument: TypeDocumentResponse?
+)
+
+data class CategorieResponse(
+    val idCategorie: Long,
+    val libelle: String?
+)
+
+data class TypeDocumentResponse(
+    val idTypeDocument: Long,
+    val libelle: String?
 )
 
 data class UserResponse(
@@ -99,6 +114,16 @@ data class LocalisationResponse(
     val latitude: Double?,
     val codePostal: String?,
     val idAdministration: Long?
+)
+
+data class LieuResponse(
+    val idAdministration: Long?,
+    val libelle: String?,
+    val adresse: String?,
+    val longitude: Double?,
+    val latitude: Double?,
+    val codePostal: String?,
+    val raison: String?
 )
 
 data class QRCodeResponse(

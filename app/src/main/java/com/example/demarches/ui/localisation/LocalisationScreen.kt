@@ -33,6 +33,10 @@ fun LocalisationScreen(
     val localisations by viewModel.localisations.collectAsState()
     val administration by viewModel.administration.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.refresh()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(

@@ -19,6 +19,8 @@ import com.example.demarches.ui.admin.AdministrationListScreen
 import com.example.demarches.ui.localisation.LocalisationScreen
 import com.example.demarches.ui.qrcode.QRCodeScannerScreen
 import com.example.demarches.ui.agent.CreerDemandeScreen
+import com.example.demarches.ui.document.DocumentListScreen
+import com.example.demarches.ui.document.DocumentDetailScreen
 
 sealed class Screen(val route: String) {
     object Login : Screen("login")
@@ -29,6 +31,10 @@ sealed class Screen(val route: String) {
     object Administrations : Screen("administrations")
     object Localisation : Screen("localisation/{idAdministration}") {
         const val ARG_ID_ADMINISTRATION = "idAdministration"
+    }
+    object DocumentList : Screen("documents")
+    object DocumentDetail : Screen("documents/{idDocument}") {
+        const val ARG_ID_DOCUMENT = "idDocument"
     }
     object QRCode : Screen("qrcode")
     object CreerDemande : Screen("creer_demande")
@@ -93,7 +99,7 @@ fun NavGraph(
                     navController.navigate(Screen.Administrations.route)
                 },
                 onDocumentsClick = {
-                    // TODO: Implement documents screen
+                    navController.navigate(Screen.DocumentList.route)
                 },
                 onCreerDemandeClick = {
                     navController.navigate(Screen.CreerDemande.route)
@@ -142,6 +148,43 @@ fun NavGraph(
             )
         ) {
             LocalisationScreen(
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(Screen.DocumentList.route) {
+            DocumentListScreen(
+                onDocumentClick = { idDocument ->
+                    navController.navigate(
+                        Screen.DocumentDetail.route.replace(
+                            "{${Screen.DocumentDetail.ARG_ID_DOCUMENT}}",
+                            idDocument.toString()
+                        )
+                    )
+                },
+                onBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.DocumentDetail.route,
+            arguments = listOf(
+                navArgument(Screen.DocumentDetail.ARG_ID_DOCUMENT) { type = NavType.LongType }
+            )
+        ) {
+            DocumentDetailScreen(
+                onLocaliserClick = { idAdministration ->
+                    navController.navigate(
+                        Screen.Localisation.route.replace(
+                            "{${Screen.Localisation.ARG_ID_ADMINISTRATION}}",
+                            idAdministration.toString()
+                        )
+                    )
+                },
                 onBack = {
                     navController.popBackStack()
                 }
