@@ -86,9 +86,11 @@ fun NavGraph(
         composable(Screen.Home.route) {
             val homeViewModel: HomeViewModel = hiltViewModel()
             val profil by homeViewModel.profil.collectAsState()
+            val userName by homeViewModel.userName.collectAsState()
 
             HomeScreen(
                 profil = profil,
+                userName = userName,
                 onDemandesClick = {
                     navController.navigate(Screen.Demandes.route)
                 },

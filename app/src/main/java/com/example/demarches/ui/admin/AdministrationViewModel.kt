@@ -18,6 +18,9 @@ class AdministrationViewModel @Inject constructor(
     private val _administrations = MutableStateFlow<List<AdministrationEntity>>(emptyList())
     val administrations: StateFlow<List<AdministrationEntity>> = _administrations
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     init {
         loadAdministrationsLocal()
     }
@@ -32,7 +35,9 @@ class AdministrationViewModel @Inject constructor(
 
     fun refreshAdministrations() {
         viewModelScope.launch {
+            _isLoading.value = true
             administrationRepository.refreshAdministrations()
+            _isLoading.value = false
         }
     }
 }
